@@ -9,9 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,11 +26,24 @@ public class UsuarioModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long usuario_id;
+
+    @Column(nullable = false)
+    private String nombres;
+
+    @Column(nullable = false)
+    private String apellidos;
+
+    @Column(nullable = false)
+    private String email;
+
     @Column(nullable = false, unique = true)
-    private String nombre;
+    private String celular;
+
+    @Column(nullable = false)
     private String estado;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "usuario_estudio", joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "estudio_id", referencedColumnName = "estudio_id"))
-    private List<EstudioModel> estudioList;
+    // @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch =
+    // FetchType.EAGER)
+    // private List<RelacionModel> relaciones;
+
 }

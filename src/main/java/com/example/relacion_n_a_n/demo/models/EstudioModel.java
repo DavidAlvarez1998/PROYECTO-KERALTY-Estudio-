@@ -1,5 +1,7 @@
 package com.example.relacion_n_a_n.demo.models;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,10 +24,16 @@ public class EstudioModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long estudio_id;
-    
+
     @Column(nullable = false, unique = true)
     private String nombre;
-    
+
     private Integer horas;
+
+    @Column(name = "fecha_inicio", nullable = true)
+    private LocalDateTime fechaInicio;
+
+    @Column(name = "fecha_fin", nullable = true)
+    private LocalDateTime fechaFin;
 
 }
