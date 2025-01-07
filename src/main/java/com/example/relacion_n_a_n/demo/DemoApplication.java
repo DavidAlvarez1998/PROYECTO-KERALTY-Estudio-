@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.example.relacion_n_a_n.demo.models.EstudioModel;
+import com.example.relacion_n_a_n.demo.models.RelacionId;
 import com.example.relacion_n_a_n.demo.models.RelacionModel;
 import com.example.relacion_n_a_n.demo.models.UsuarioModel;
 import com.example.relacion_n_a_n.demo.services.EstudioService;
@@ -34,17 +35,21 @@ public class DemoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		// consultarEstudiosPorUsuarios();
-		// CrearUsuarioConEstudios();
-		// consultarEstudiosPorUsuarios
 
-		System.out.println(crearEstudiosPorUsuario());
+		// CrearUsuarioConEstudios();
+		// consultarEstudiosPorUsuarios();
+		// crearEstudiosPorUsuario();
+
+		// System.out.println(consultarEstudiosPorUsuarios());
 	}
 
-	////////////////////////////////////////////////////////////
+	/// 
+	/// 
+	/// 
+	/// 
 
-	public List<RelacionModel> consultarEstudiosPorUsuarios() {
-		List<RelacionModel> usuOptional = usuarioService.ConsultarEstudiosPorUsuario(1L);
+	public List<EstudioModel> consultarEstudiosPorUsuarios() {
+		List<EstudioModel> usuOptional = usuarioService.ConsultarEstudiosPorUsuario(1L);
 		return usuOptional;
 	}
 
@@ -57,17 +62,17 @@ public class DemoApplication implements CommandLineRunner {
 				.nombre("React")
 				.horas(21)
 				.build();
-		UsuarioModel usuario = usuarioService.registrarEstudiosPorUsuario(3L, List.of(estudio, estudio2));
+		UsuarioModel usuario = usuarioService.registrarEstudiosPorUsuario(1L, List.of(estudio, estudio2));
 		return usuario;
 
 	}
 
 	public UsuarioModel CrearUsuarioConEstudios() {
 		UsuarioModel usuario = UsuarioModel.builder()
-				.nombres("Leo")
-				.apellidos("Messi")
-				.email("lmessi@g.com")
-				.celular("31344359003")
+				.nombres("Shakira")
+				.apellidos("Aguirre")
+				.email("shaa@g.com")
+				.celular("3112259003")
 				.estado("Activo")
 				.build();
 
@@ -75,14 +80,14 @@ public class DemoApplication implements CommandLineRunner {
 		UsuarioModel usuarioCreado = usuarioService.createUsuario(usuario);
 
 		EstudioModel estudio1 = EstudioModel.builder()
-				.nombre("ReactNative")
+				.nombre("Python")
 				.horas(44)
 				.fechaInicio(LocalDateTime.of(2025, 1, 1, 7, 0))
 				.fechaFin(LocalDateTime.of(2025, 6, 28, 11, 0))
 				.build();
 
 		EstudioModel estudio2 = EstudioModel.builder()
-				.nombre("SQL")
+				.nombre("Java")
 				.horas(11)
 				.fechaInicio(LocalDateTime.of(2025, 1, 1, 7, 0))
 				.fechaFin(LocalDateTime.of(2025, 6, 28, 11, 0))
@@ -92,14 +97,19 @@ public class DemoApplication implements CommandLineRunner {
 		EstudioModel estudioGuardado1 = estudioService.createEstudio(estudio1);
 		EstudioModel estudioGuardado2 = estudioService.createEstudio(estudio2);
 
-		// Crear La Relacion
+		// Crear las relaciones con claves compuestas
+		RelacionId relacionId1 = new RelacionId(usuarioCreado.getUsuario_id(), estudioGuardado1.getEstudio_id());
+		RelacionId relacionId2 = new RelacionId(usuarioCreado.getUsuario_id(), estudioGuardado2.getEstudio_id());
+
 		RelacionModel relacion1 = RelacionModel.builder()
+				.relacionId(relacionId1)
 				.usuario(usuarioCreado)
 				.estudio(estudioGuardado1)
 				.estado("activo")
 				.build();
 
 		RelacionModel relacion2 = RelacionModel.builder()
+				.relacionId(relacionId2)
 				.usuario(usuarioCreado)
 				.estudio(estudioGuardado2)
 				.estado("activo")

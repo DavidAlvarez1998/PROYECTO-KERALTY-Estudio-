@@ -2,11 +2,13 @@ package com.example.relacion_n_a_n.demo.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.relacion_n_a_n.demo.models.EstudioModel;
+import com.example.relacion_n_a_n.demo.models.RelacionId;
 import com.example.relacion_n_a_n.demo.models.RelacionModel;
 import com.example.relacion_n_a_n.demo.models.UsuarioModel;
 import com.example.relacion_n_a_n.demo.repositories.UsuarioRepository;
@@ -52,20 +54,34 @@ public class UsuarioService {
                     Optional<EstudioModel> estudioDB = estudioService.findByName(nuevoEstudio.getNombre());
 
                     if (estudioDB.isPresent()) {
+
                         EstudioModel estudioExistente = estudioDB.get();
-                        RelacionModel relacion = new RelacionModel();
-                        relacion.setUsuario(usuario);
-                        relacion.setEstudio(estudioExistente);
-                        relacion.setEstado("activo");
+
+                        RelacionId relacionId = new RelacionId(usuario.getUsuario_id(),
+                                estudioExistente.getEstudio_id());
+
+                        RelacionModel relacion = RelacionModel.builder()
+                                .relacionId(relacionId)
+                                .usuario(usuario)
+                                .estudio(estudioExistente)
+                                .estado("activo")
+                                .build();
 
                         relacionService.createRelacion(relacion);
+
                     } else {
+
                         EstudioModel estudioGuardado = estudioService.createEstudio(nuevoEstudio);
 
-                        RelacionModel relacion = new RelacionModel();
-                        relacion.setUsuario(usuario);
-                        relacion.setEstudio(estudioGuardado);
-                        relacion.setEstado("activo");
+                        RelacionId relacionId = new RelacionId(usuario.getUsuario_id(),
+                                estudioGuardado.getEstudio_id());
+
+                        RelacionModel relacion = RelacionModel.builder()
+                                .relacionId(relacionId)
+                                .usuario(usuario)
+                                .estudio(estudioGuardado)
+                                .estado("activo")
+                                .build();
 
                         relacionService.createRelacion(relacion);
                     }
@@ -79,7 +95,13 @@ public class UsuarioService {
         }
     }
 
-    public List<RelacionModel> ConsultarEstudiosPorUsuario(Long id_usuario) {
-        return relacionService.findByUsuarioId(id_usuario);
+    public List<EstudioModel> ConsultarEstudiosPorUsuario(Long id_usuario) {
+        List<RelacionModel> relaciones = relacionService.findByUsuarioId(id_usuario);
+        List<EstudioModel> estudios = relaciones.stream()
+                .map(RelacionModel::getEstudio)
+                .collect(Collectors.toList());
+        return estudios;
+
     }
+
 }

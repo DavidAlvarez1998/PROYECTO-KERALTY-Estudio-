@@ -1,10 +1,8 @@
 package com.example.relacion_n_a_n.demo.models;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -21,18 +19,16 @@ import lombok.NoArgsConstructor;
 @Table(name = "estudios_has_usuario")
 public class RelacionModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long relacion_id;
+    @EmbeddedId
+    private RelacionId relacionId;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "usuario_id", referencedColumnName = "usuario_id")
+    @JoinColumn(name = "usuario_id", referencedColumnName = "usuario_id", insertable = false, updatable = false)
     private UsuarioModel usuario;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "estudio_id", referencedColumnName = "estudio_id")
+    @JoinColumn(name = "estudio_id", referencedColumnName = "estudio_id", insertable = false, updatable = false)
     private EstudioModel estudio;
 
     private String estado;
-
 }
