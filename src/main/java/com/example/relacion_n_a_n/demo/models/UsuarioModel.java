@@ -28,7 +28,7 @@ public class UsuarioModel {
     @Column(nullable = false)
     private String apellidos;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false, unique = true)

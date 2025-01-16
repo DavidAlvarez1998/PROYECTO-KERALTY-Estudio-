@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.relacion_n_a_n.demo.models.EstudioModel;
 import com.example.relacion_n_a_n.demo.models.RelacionId;
@@ -24,18 +25,22 @@ public class UsuarioService {
     @Autowired
     EstudioService estudioService;
 
+    @Transactional
     public UsuarioModel createUsuario(UsuarioModel usuario) {
         return usuarioRepository.save(usuario);
     }
 
+    @Transactional(readOnly = true)
     public List<UsuarioModel> allUsuarios() {
         return usuarioRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Optional<UsuarioModel> buscarPorID(Long usuario_id) {
         return usuarioRepository.findById(usuario_id);
     }
 
+    @Transactional
     public UsuarioModel registrarEstudiosPorUsuario(Long id_usuario, List<EstudioModel> nuevosEstudios) {
         Optional<UsuarioModel> usuarioOptional = buscarPorID(id_usuario);
 
@@ -95,6 +100,7 @@ public class UsuarioService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<EstudioModel> ConsultarEstudiosPorUsuario(Long id_usuario) {
         List<RelacionModel> relaciones = relacionService.findByUsuarioId(id_usuario);
         List<EstudioModel> estudios = relaciones.stream()

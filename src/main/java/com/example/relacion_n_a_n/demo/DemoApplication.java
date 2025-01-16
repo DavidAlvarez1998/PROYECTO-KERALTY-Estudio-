@@ -31,6 +31,7 @@ public class DemoApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
+
 	}
 
 	@Override
@@ -40,13 +41,8 @@ public class DemoApplication implements CommandLineRunner {
 		// consultarEstudiosPorUsuarios();
 		// crearEstudiosPorUsuario();
 
-		// System.out.println(consultarEstudiosPorUsuarios());
+		// System.out.println(crearEstudiosPorUsuario());
 	}
-
-	/// 
-	/// 
-	/// 
-	/// 
 
 	public List<EstudioModel> consultarEstudiosPorUsuarios() {
 		List<EstudioModel> usuOptional = usuarioService.ConsultarEstudiosPorUsuario(1L);
@@ -62,17 +58,17 @@ public class DemoApplication implements CommandLineRunner {
 				.nombre("React")
 				.horas(21)
 				.build();
-		UsuarioModel usuario = usuarioService.registrarEstudiosPorUsuario(1L, List.of(estudio, estudio2));
+		UsuarioModel usuario = usuarioService.registrarEstudiosPorUsuario(4L, List.of(estudio, estudio2));
 		return usuario;
 
 	}
 
 	public UsuarioModel CrearUsuarioConEstudios() {
 		UsuarioModel usuario = UsuarioModel.builder()
-				.nombres("Shakira")
-				.apellidos("Aguirre")
-				.email("shaa@g.com")
-				.celular("3112259003")
+				.nombres("Jaime")
+				.apellidos("Zapata")
+				.email("shaasd@g.com")
+				.celular("365168859003")
 				.estado("Activo")
 				.build();
 
@@ -80,14 +76,14 @@ public class DemoApplication implements CommandLineRunner {
 		UsuarioModel usuarioCreado = usuarioService.createUsuario(usuario);
 
 		EstudioModel estudio1 = EstudioModel.builder()
-				.nombre("Python")
+				.nombre("C++")
 				.horas(44)
 				.fechaInicio(LocalDateTime.of(2025, 1, 1, 7, 0))
 				.fechaFin(LocalDateTime.of(2025, 6, 28, 11, 0))
 				.build();
 
 		EstudioModel estudio2 = EstudioModel.builder()
-				.nombre("Java")
+				.nombre("Fisica")
 				.horas(11)
 				.fechaInicio(LocalDateTime.of(2025, 1, 1, 7, 0))
 				.fechaFin(LocalDateTime.of(2025, 6, 28, 11, 0))
@@ -118,6 +114,8 @@ public class DemoApplication implements CommandLineRunner {
 		// Guardar Relacion
 		relacionService.createRelacion(relacion1);
 		relacionService.createRelacion(relacion2);
+
+		////
 
 		Optional<UsuarioModel> usuarioOptional = usuarioService.buscarPorID(usuarioCreado.getUsuario_id());
 

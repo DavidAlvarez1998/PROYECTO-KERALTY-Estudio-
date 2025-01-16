@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.relacion_n_a_n.demo.models.RelacionModel;
 import com.example.relacion_n_a_n.demo.repositories.RealacionRepository;
@@ -14,10 +15,12 @@ public class RelacionService {
     @Autowired
     private RealacionRepository relacionRepository;
 
+    @Transactional
     public RelacionModel createRelacion(RelacionModel relacion) {
         return relacionRepository.save(relacion);
     }
 
+    @Transactional(readOnly = true)
     public List<RelacionModel> findByUsuarioId(long id_usuario) {
         return relacionRepository.findByUsuarioId(id_usuario);
     }
