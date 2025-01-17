@@ -1,18 +1,12 @@
 package com.example.relacion_n_a_n.demo.controllers;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.relacion_n_a_n.demo.models.EstudioModel;
+import com.example.relacion_n_a_n.demo.DTOs.request.EstudioRequestDTO;
+import com.example.relacion_n_a_n.demo.DTOs.response.EstudioResponseDTO;
 import com.example.relacion_n_a_n.demo.services.EstudioService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/estudio")
@@ -22,18 +16,17 @@ public class EstudioController {
     EstudioService estudioService;
 
     @PostMapping()
-    public EstudioModel createEstudio(@RequestBody EstudioModel estudio) {
-        return estudioService.createEstudio(estudio);
+    public EstudioResponseDTO createEstudio(@RequestBody EstudioRequestDTO estudioRequestDTO) {
+        return estudioService.createEstudio(estudioRequestDTO);
     }
 
     @GetMapping()
-    public List<EstudioModel> allEstudio() {
+    public List<EstudioResponseDTO> allEstudio() {
         return estudioService.allEstudios();
     }
 
     @GetMapping(path = "/{id}")
-    public Optional<EstudioModel> obtenerEstudioPorId(@PathVariable("id") Long estudio_id) {
+    public EstudioResponseDTO obtenerEstudioPorId(@PathVariable("id") Long estudio_id) {
         return estudioService.findById(estudio_id);
     }
-
 }

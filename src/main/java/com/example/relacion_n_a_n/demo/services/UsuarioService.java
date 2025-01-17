@@ -1,20 +1,21 @@
 package com.example.relacion_n_a_n.demo.services;
 
 import java.util.List;
-import java.util.Optional;
 
-import com.example.relacion_n_a_n.demo.models.EstudioModel;
-import com.example.relacion_n_a_n.demo.models.UsuarioModel;
+import com.example.relacion_n_a_n.demo.DTOs.request.EstudioRequestDTO;
+import com.example.relacion_n_a_n.demo.DTOs.request.UsuarioRequestDTO;
+import com.example.relacion_n_a_n.demo.DTOs.response.EstudioResponseDTO;
+import com.example.relacion_n_a_n.demo.DTOs.response.UsuarioResponseDTO;
 
 public interface UsuarioService {
 
-    UsuarioModel createUsuario(UsuarioModel usuario);
+    UsuarioResponseDTO createUsuario(UsuarioRequestDTO usuario);
 
-    List<UsuarioModel> allUsuarios();
+    List<UsuarioResponseDTO> allUsuarios();
 
-    Optional<UsuarioModel> buscarPorID(Long usuario_id);
+    UsuarioResponseDTO buscarPorID(Long id_usuario);
 
-    UsuarioModel registrarEstudiosPorUsuario(Long id_usuario, List<EstudioModel> nuevosEstudios);
+    UsuarioResponseDTO registrarEstudiosPorUsuario(Long id_usuario, List<EstudioRequestDTO> nuevosEstudios);
 
-    List<EstudioModel> ConsultarEstudiosPorUsuario(Long id_usuario);
+    List<EstudioResponseDTO> ConsultarEstudiosPorUsuario(Long id_usuario);
 }

@@ -44,86 +44,91 @@ public class DemoApplication implements CommandLineRunner {
 		// System.out.println(crearEstudiosPorUsuario());
 	}
 
-	public List<EstudioModel> consultarEstudiosPorUsuarios() {
-		List<EstudioModel> usuOptional = usuarioService.ConsultarEstudiosPorUsuario(1L);
-		return usuOptional;
-	}
+	// public List<EstudioModel> consultarEstudiosPorUsuarios() {
+	// List<EstudioModel> usuOptional =
+	// usuarioService.ConsultarEstudiosPorUsuario(1L);
+	// return usuOptional;
+	// }
 
-	public UsuarioModel crearEstudiosPorUsuario() {
-		EstudioModel estudio = EstudioModel.builder()
-				.nombre("Ingles")
-				.horas(50)
-				.build();
-		EstudioModel estudio2 = EstudioModel.builder()
-				.nombre("React")
-				.horas(21)
-				.build();
-		UsuarioModel usuario = usuarioService.registrarEstudiosPorUsuario(4L, List.of(estudio, estudio2));
-		return usuario;
+	// public UsuarioModel crearEstudiosPorUsuario() {
+	// EstudioModel estudio = EstudioModel.builder()
+	// .nombre("Ingles")
+	// .horas(50)
+	// .build();
+	// EstudioModel estudio2 = EstudioModel.builder()
+	// .nombre("React")
+	// .horas(21)
+	// .build();
+	// UsuarioModel usuario = usuarioService.registrarEstudiosPorUsuario(4L,
+	// List.of(estudio, estudio2));
+	// return usuario;
 
-	}
+	// }
 
-	public UsuarioModel CrearUsuarioConEstudios() {
-		UsuarioModel usuario = UsuarioModel.builder()
-				.nombres("Jaime")
-				.apellidos("Zapata")
-				.email("shaasd@g.com")
-				.celular("365168859003")
-				.estado("Activo")
-				.build();
+	// public UsuarioModel CrearUsuarioConEstudios() {
+	// UsuarioModel usuario = UsuarioModel.builder()
+	// .nombres("Jaime")
+	// .apellidos("Zapata")
+	// .email("shaasd@g.com")
+	// .celular("365168859003")
+	// .estado("Activo")
+	// .build();
 
-		// Guardo Usuario
-		UsuarioModel usuarioCreado = usuarioService.createUsuario(usuario);
+	// // Guardo Usuario
+	// UsuarioModel usuarioCreado = usuarioService.createUsuario(usuario);
 
-		EstudioModel estudio1 = EstudioModel.builder()
-				.nombre("C++")
-				.horas(44)
-				.fechaInicio(LocalDateTime.of(2025, 1, 1, 7, 0))
-				.fechaFin(LocalDateTime.of(2025, 6, 28, 11, 0))
-				.build();
+	// EstudioModel estudio1 = EstudioModel.builder()
+	// .nombre("C++")
+	// .horas(44)
+	// .fechaInicio(LocalDateTime.of(2025, 1, 1, 7, 0))
+	// .fechaFin(LocalDateTime.of(2025, 6, 28, 11, 0))
+	// .build();
 
-		EstudioModel estudio2 = EstudioModel.builder()
-				.nombre("Fisica")
-				.horas(11)
-				.fechaInicio(LocalDateTime.of(2025, 1, 1, 7, 0))
-				.fechaFin(LocalDateTime.of(2025, 6, 28, 11, 0))
-				.build();
+	// EstudioModel estudio2 = EstudioModel.builder()
+	// .nombre("Fisica")
+	// .horas(11)
+	// .fechaInicio(LocalDateTime.of(2025, 1, 1, 7, 0))
+	// .fechaFin(LocalDateTime.of(2025, 6, 28, 11, 0))
+	// .build();
 
-		// Guardo Estudios
-		EstudioModel estudioGuardado1 = estudioService.createEstudio(estudio1);
-		EstudioModel estudioGuardado2 = estudioService.createEstudio(estudio2);
+	// // Guardo Estudios
+	// EstudioModel estudioGuardado1 = estudioService.createEstudio(estudio1);
+	// EstudioModel estudioGuardado2 = estudioService.createEstudio(estudio2);
 
-		// Crear las relaciones con claves compuestas
-		RelacionId relacionId1 = new RelacionId(usuarioCreado.getUsuario_id(), estudioGuardado1.getEstudio_id());
-		RelacionId relacionId2 = new RelacionId(usuarioCreado.getUsuario_id(), estudioGuardado2.getEstudio_id());
+	// // Crear las relaciones con claves compuestas
+	// RelacionId relacionId1 = new RelacionId(usuarioCreado.getUsuario_id(),
+	// estudioGuardado1.getEstudio_id());
+	// RelacionId relacionId2 = new RelacionId(usuarioCreado.getUsuario_id(),
+	// estudioGuardado2.getEstudio_id());
 
-		RelacionModel relacion1 = RelacionModel.builder()
-				.relacionId(relacionId1)
-				.usuario(usuarioCreado)
-				.estudio(estudioGuardado1)
-				.estado("activo")
-				.build();
+	// RelacionModel relacion1 = RelacionModel.builder()
+	// .relacionId(relacionId1)
+	// .usuario(usuarioCreado)
+	// .estudio(estudioGuardado1)
+	// .estado("activo")
+	// .build();
 
-		RelacionModel relacion2 = RelacionModel.builder()
-				.relacionId(relacionId2)
-				.usuario(usuarioCreado)
-				.estudio(estudioGuardado2)
-				.estado("activo")
-				.build();
+	// RelacionModel relacion2 = RelacionModel.builder()
+	// .relacionId(relacionId2)
+	// .usuario(usuarioCreado)
+	// .estudio(estudioGuardado2)
+	// .estado("activo")
+	// .build();
 
-		// Guardar Relacion
-		relacionService.createRelacion(relacion1);
-		relacionService.createRelacion(relacion2);
+	// // Guardar Relacion
+	// relacionService.createRelacion(relacion1);
+	// relacionService.createRelacion(relacion2);
 
-		////
+	// ////
 
-		Optional<UsuarioModel> usuarioOptional = usuarioService.buscarPorID(usuarioCreado.getUsuario_id());
+	// Optional<UsuarioModel> usuarioOptional =
+	// usuarioService.buscarPorID(usuarioCreado.getUsuario_id());
 
-		if (usuarioOptional.isPresent()) {
-			return usuarioOptional.get();
-		} else {
-			return null;
-		}
-	}
+	// if (usuarioOptional.isPresent()) {
+	// return usuarioOptional.get();
+	// } else {
+	// return null;
+	// }
+	// }
 
 }

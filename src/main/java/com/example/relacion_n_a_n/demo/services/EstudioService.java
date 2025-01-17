@@ -1,17 +1,17 @@
 package com.example.relacion_n_a_n.demo.services;
 
 import java.util.List;
-import java.util.Optional;
 
-import com.example.relacion_n_a_n.demo.models.EstudioModel;
+import com.example.relacion_n_a_n.demo.DTOs.request.EstudioRequestDTO;
+import com.example.relacion_n_a_n.demo.DTOs.response.EstudioResponseDTO;
 
 public interface EstudioService {
 
-    EstudioModel createEstudio(EstudioModel estudio);
+    EstudioResponseDTO createEstudio(EstudioRequestDTO estudio);
 
-    List<EstudioModel> allEstudios();
+    List<EstudioResponseDTO> allEstudios();
 
-    Optional<EstudioModel> findByName(String nombre);
+    EstudioResponseDTO findByNombre(String nombre);
 
-    Optional<EstudioModel> findById(Long id);
+    EstudioResponseDTO findById(Long id);
 }

@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.relacion_n_a_n.demo.DTOs.request.EstudioRequestDTO;
+import com.example.relacion_n_a_n.demo.DTOs.request.UsuarioRequestDTO;
+import com.example.relacion_n_a_n.demo.DTOs.response.EstudioResponseDTO;
+import com.example.relacion_n_a_n.demo.DTOs.response.UsuarioResponseDTO;
 import com.example.relacion_n_a_n.demo.models.EstudioModel;
 import com.example.relacion_n_a_n.demo.models.RelacionId;
 import com.example.relacion_n_a_n.demo.models.RelacionModel;
@@ -26,54 +30,113 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     EstudioServiceImpl estudioService;
 
+    // Métodos de conversión
+    public UsuarioResponseDTO convertUsuarioModelToUsuarioResponseDTO(UsuarioModel usuarioModel) {
+        return UsuarioResponseDTO.builder()
+                .usuarioId(usuarioModel.getUsuario_id())
+                .nombres(usuarioModel.getNombres())
+                .apellidos(usuarioModel.getApellidos())
+                .email(usuarioModel.getEmail())
+                .celular(usuarioModel.getCelular())
+                .estado(usuarioModel.getEstado())
+                .build();
+    }
+
+    public EstudioModel convertEstudioResponseDTOToEstudioModel(EstudioResponseDTO estudioResponseDTO) {
+        return EstudioModel.builder()
+                .estudio_id(estudioResponseDTO.getEstudioId())
+                .nombre(estudioResponseDTO.getNombre())
+                .horas(estudioResponseDTO.getHoras())
+                .fechaInicio(estudioResponseDTO.getFechaInicio())
+                .fechaFin(estudioResponseDTO.getFechaFin())
+                .build();
+    }
+
+    public EstudioResponseDTO convertEstudioModelToEstudioResponseDTO(EstudioModel estudioModel) {
+        return EstudioResponseDTO.builder()
+                .estudioId(estudioModel.getEstudio_id())
+                .nombre(estudioModel.getNombre())
+                .horas(estudioModel.getHoras())
+                .fechaInicio(estudioModel.getFechaInicio())
+                .fechaFin(estudioModel.getFechaFin())
+                .build();
+    }
+
+    public UsuarioModel convertUsuarioRequestDTOToUsuarioModel(UsuarioRequestDTO usuarioRequestDTO) {
+        return UsuarioModel.builder()
+                .nombres(usuarioRequestDTO.getNombres())
+                .apellidos(usuarioRequestDTO.getApellidos())
+                .email(usuarioRequestDTO.getEmail())
+                .celular(usuarioRequestDTO.getCelular())
+                .estado(usuarioRequestDTO.getEstado())
+                .build();
+    }
+
+    public UsuarioModel convertUsuarioResponseDTOToUsuarioModel(UsuarioResponseDTO usuarioResponseDTO) {
+        return UsuarioModel.builder()
+                .usuario_id(usuarioResponseDTO.getUsuarioId())
+                .nombres(usuarioResponseDTO.getNombres())
+                .apellidos(usuarioResponseDTO.getApellidos())
+                .email(usuarioResponseDTO.getEmail())
+                .celular(usuarioResponseDTO.getCelular())
+                .estado(usuarioResponseDTO.getEstado())
+                .build();
+    }
+
     @Override
     @Transactional
-    public UsuarioModel createUsuario(UsuarioModel usuario) {
-        return usuarioRepository.save(usuario);
+    public UsuarioResponseDTO createUsuario(UsuarioRequestDTO usuario) {
+        UsuarioModel usuarioModel = convertUsuarioRequestDTOToUsuarioModel(usuario);
+        UsuarioModel usuarioDB = usuarioRepository.save(usuarioModel); // try
+        return convertUsuarioModelToUsuarioResponseDTO(usuarioDB);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<UsuarioModel> allUsuarios() {
-        return usuarioRepository.findAll();
+    public List<UsuarioResponseDTO> allUsuarios() {
+        List<UsuarioModel> usuarios = usuarioRepository.findAll();
+        return usuarios.stream()
+                .map(this::convertUsuarioModelToUsuarioResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<UsuarioModel> buscarPorID(Long usuario_id) {
-        return usuarioRepository.findById(usuario_id);
+    public UsuarioResponseDTO buscarPorID(Long usuario_id) {
+        Optional<UsuarioModel> usuario = usuarioRepository.findById(usuario_id);
+        if (usuario.isPresent()) {
+            return convertUsuarioModelToUsuarioResponseDTO(usuario.get());
+        } else {
+            return null;
+        }
     }
 
     @Override
     @Transactional
-    public UsuarioModel registrarEstudiosPorUsuario(Long id_usuario, List<EstudioModel> nuevosEstudios) {
-        Optional<UsuarioModel> usuarioOptional = buscarPorID(id_usuario);
+    public UsuarioResponseDTO registrarEstudiosPorUsuario(Long id_usuario, List<EstudioRequestDTO> nuevosEstudios) {
+        UsuarioResponseDTO usuario = buscarPorID(id_usuario);
 
-        if (usuarioOptional.isPresent()) {
-            UsuarioModel usuario = usuarioOptional.get();
+        if (usuario != null) {
+            List<RelacionModel> listaRelacionModels = relacionService.findByUsuarioId(usuario.getUsuarioId());
 
-            List<RelacionModel> listaRelacionModels = relacionService.findByUsuarioId(usuario.getUsuario_id());
-
-            for (EstudioModel nuevoEstudio : nuevosEstudios) {
+            for (EstudioRequestDTO nuevoEstudio : nuevosEstudios) {
 
                 boolean estudioYaExistente = listaRelacionModels.stream()
                         .anyMatch(relacion -> relacion.getEstudio().getNombre().equals(nuevoEstudio.getNombre()));
 
                 if (!estudioYaExistente) {
 
-                    Optional<EstudioModel> estudioDB = estudioService.findByName(nuevoEstudio.getNombre());
+                    EstudioResponseDTO estudioDB = estudioService.findByNombre(nuevoEstudio.getNombre());
 
-                    if (estudioDB.isPresent()) {
+                    if (estudioDB != null) {
 
-                        EstudioModel estudioExistente = estudioDB.get();
-
-                        RelacionId relacionId = new RelacionId(usuario.getUsuario_id(),
-                                estudioExistente.getEstudio_id());
+                        RelacionId relacionId = new RelacionId(usuario.getUsuarioId(),
+                                estudioDB.getEstudioId());
 
                         RelacionModel relacion = RelacionModel.builder()
                                 .relacionId(relacionId)
-                                .usuario(usuario)
-                                .estudio(estudioExistente)
+                                .usuario(convertUsuarioResponseDTOToUsuarioModel(usuario))
+                                .estudio(convertEstudioResponseDTOToEstudioModel(estudioDB))
                                 .estado("activo")
                                 .build();
 
@@ -81,15 +144,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
                     } else {
 
-                        EstudioModel estudioGuardado = estudioService.createEstudio(nuevoEstudio);
+                        EstudioResponseDTO estudioGuardado = estudioService.createEstudio(nuevoEstudio);
 
-                        RelacionId relacionId = new RelacionId(usuario.getUsuario_id(),
-                                estudioGuardado.getEstudio_id());
+                        RelacionId relacionId = new RelacionId(usuario.getUsuarioId(),
+                                estudioGuardado.getEstudioId());
 
                         RelacionModel relacion = RelacionModel.builder()
                                 .relacionId(relacionId)
-                                .usuario(usuario)
-                                .estudio(estudioGuardado)
+                                .usuario(convertUsuarioResponseDTOToUsuarioModel(usuario))
+                                .estudio(convertEstudioResponseDTOToEstudioModel(estudioGuardado))
                                 .estado("activo")
                                 .build();
 
@@ -107,13 +170,16 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EstudioModel> ConsultarEstudiosPorUsuario(Long id_usuario) {
+    public List<EstudioResponseDTO> ConsultarEstudiosPorUsuario(Long id_usuario) {
         List<RelacionModel> relaciones = relacionService.findByUsuarioId(id_usuario);
+
         List<EstudioModel> estudios = relaciones.stream()
                 .map(RelacionModel::getEstudio)
                 .collect(Collectors.toList());
-        return estudios;
 
+        return estudios.stream()
+                .map(estudio -> estudioService.convertEstudioModelToEstudioResponseDTO(estudio))
+                .collect(Collectors.toList());
     }
 
 }
