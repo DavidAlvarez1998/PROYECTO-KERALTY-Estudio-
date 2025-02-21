@@ -1,18 +1,9 @@
 package com.example.relacion_n_a_n.demo;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import com.example.relacion_n_a_n.demo.models.EstudioModel;
-import com.example.relacion_n_a_n.demo.models.RelacionId;
-import com.example.relacion_n_a_n.demo.models.RelacionModel;
-import com.example.relacion_n_a_n.demo.models.UsuarioModel;
 import com.example.relacion_n_a_n.demo.services.EstudioService;
 import com.example.relacion_n_a_n.demo.services.RelacionService;
 import com.example.relacion_n_a_n.demo.services.UsuarioService;

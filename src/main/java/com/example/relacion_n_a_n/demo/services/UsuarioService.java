@@ -17,5 +17,9 @@ public interface UsuarioService {
 
     UsuarioResponseDTO registrarEstudiosPorUsuario(Long id_usuario, List<EstudioRequestDTO> nuevosEstudios);
 
-    List<EstudioResponseDTO> ConsultarEstudiosPorUsuario(Long id_usuario);
+    List<EstudioResponseDTO> consultarEstudiosPorUsuario(Long id_usuario);
+
+    void deleteUsuario(Long id_usuario);
+
+    UsuarioResponseDTO updateUsuario(Long id_usuario, UsuarioRequestDTO usuarioRequest);
 }

@@ -11,7 +11,12 @@ public interface EstudioService {
 
     List<EstudioResponseDTO> allEstudios();
 
+    EstudioResponseDTO findById(Long estudio_id);
+
     EstudioResponseDTO findByNombre(String nombre);
 
-    EstudioResponseDTO findById(Long id);
+    EstudioResponseDTO updateEstudio(Long estudioId, EstudioRequestDTO estudioRequest);
+
+    void deleteEstudio(Long estudioId);
+
 }

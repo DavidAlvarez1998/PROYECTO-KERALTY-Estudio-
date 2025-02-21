@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RelacionRequestDTO {
 
-    @NotNull(message = "El ID del usuario no puede ser nulo")
+    @NotNull(message = "El ID del usuario no puede ser null")
     private Long usuarioId;
 
-    @NotNull(message = "El ID del estudio no puede ser nulo")
+    @NotNull(message = "El ID del estudio no puede ser null")
     private Long estudioId;
 
     private String estado;
